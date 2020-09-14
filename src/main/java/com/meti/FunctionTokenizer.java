@@ -4,19 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FunctionTokenizer implements Tokenizer<Node> {
-    private final Content content;
-
+public class FunctionTokenizer extends AbstractTokenizer {
     public FunctionTokenizer(Content content) {
-        this.content = content;
+        super(content);
     }
 
     @Override
-    public Optional<Node> tokenize() {
+    public Optional<Node> evaluate() {
         OptionalInt startOptional = content.index("(");
         OptionalInt endOptional = content.index(")");
         if (startOptional.isPresent() && endOptional.isPresent()) {
@@ -62,10 +59,10 @@ public class FunctionTokenizer implements Tokenizer<Node> {
     }
 
     private List<Field> parseFields(int start, int end) {
-        return content.slice(start + 1, end).splitByStrategy(ParameterStrategy::new)
+        return content.slice(start + 1, end).split(ParameterStrategy::new)
                 .filter(Content::isPresent)
-                .map(FieldTokenizer::new)
-                .map(FieldTokenizer::tokenize)
+                .map(FieldEvaluator::new)
+                .map(FieldEvaluator::evaluate)
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
     }

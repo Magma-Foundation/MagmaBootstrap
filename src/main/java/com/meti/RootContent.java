@@ -1,5 +1,6 @@
 package com.meti;
 
+import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -9,6 +10,18 @@ public class RootContent implements Content {
 
     public RootContent(String value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        Content that = (Content) o;
+        return that.value().apply(value::equals);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 
     @Override
@@ -45,21 +58,31 @@ public class RootContent implements Content {
 
     @Override
     public int length(){
-        throw new UnsupportedOperationException();
+        return value.length();
     }
 
     @Override
     public char apply(int index){
-        throw new UnsupportedOperationException();
+        return value.charAt(index);
     }
 
     @Override
-    public Stream<Content> splitByStrategy(Function<Content, Strategy> constructor) {
-        throw new UnsupportedOperationException();
+    public Stream<Content> split(Function<Content, Strategy> constructor) {
+        return constructor.apply(this).split();
     }
 
     @Override
     public Monad<String> value(){
         return new Monad<>(value);
+    }
+
+    @Override
+    public boolean startsWith(String sequence) {
+        return value.startsWith(sequence);
+    }
+
+    @Override
+    public boolean endsWith(String sequence) {
+        return value.endsWith(sequence);
     }
 }

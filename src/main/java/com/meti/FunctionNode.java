@@ -38,7 +38,7 @@ class FunctionNode implements Node {
     }
 
     private String appendValue(String s) {
-        return s + value.render();
+        return s + value.render().orElseThrow();
     }
 
     private String renderParameters() {

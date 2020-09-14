@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class FormattedType implements Type {
-
     protected abstract String createFormat();
 
     @Override
@@ -14,6 +13,6 @@ public abstract class FormattedType implements Type {
 
     @Override
     public Optional<String> render(String name){
-        throw new UnsupportedOperationException();
+        return Optional.of(String.format(createFormat(), name));
     }
 }

@@ -5,6 +5,10 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public interface Content {
+    boolean startsWith(String sequence);
+
+    boolean endsWith(String sequence);
+
     int length();
 
     char apply(int index);
@@ -17,7 +21,7 @@ public interface Content {
 
     OptionalInt index(String sequence);
 
-    Stream<Content> splitByStrategy(Function<Content, Strategy> constructor);
+    Stream<Content> split(Function<Content, Strategy> constructor);
 
     boolean isPresent();
 

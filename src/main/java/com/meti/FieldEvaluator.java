@@ -2,17 +2,16 @@ package com.meti;
 
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.Function;
 
-public class FieldTokenizer implements Tokenizer<Field> {
+public class FieldEvaluator implements Evaluator<Field> {
     private final Content content;
 
-    public FieldTokenizer(Content content) {
+    public FieldEvaluator(Content content) {
         this.content = content;
     }
 
     @Override
-    public Optional<Field> tokenize() {
+    public Optional<Field> evaluate() {
         OptionalInt separatorOptional = content.index(":");
         if (separatorOptional.isPresent()) {
             int separator = separatorOptional.getAsInt();

@@ -10,8 +10,8 @@ class FunctionTokenizerTest {
     @Test
     void valid() {
         Content content = new RootContent("def main() : Void => {}");
-        Tokenizer<Node> tokenizer = new FunctionTokenizer(content);
-        Optional<Node> optional = tokenizer.tokenize();
+        Evaluator<Node> evaluator = new FunctionTokenizer(content);
+        Optional<Node> optional = evaluator.evaluate();
         assertTrue(optional.isPresent());
     }
 }

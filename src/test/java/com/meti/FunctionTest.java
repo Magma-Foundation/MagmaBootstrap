@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 class FunctionTest extends CompileTest {
     @Test
     void singleParameter() {
-        compile("int pass(int value){return value;}", "def pass(value : Int) : Int => {return value;}");
+        compile("void pass(int value){}", "def pass(value : Int) : Void => {}");
     }
 
     @Test

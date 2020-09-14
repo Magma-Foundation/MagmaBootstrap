@@ -1,5 +1,6 @@
 package com.meti;
 
+import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -44,6 +45,18 @@ public class ChildContent implements Content {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        Content that = (Content) o;
+        return that.value().apply(value::equals);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parent, value, start, end);
+    }
+
+    @Override
     public boolean isPresent() {
         return !value.isBlank();
     }
@@ -59,12 +72,22 @@ public class ChildContent implements Content {
     }
 
     @Override
-    public Stream<Content> splitByStrategy(Function<Content, Strategy> constructor) {
+    public Stream<Content> split(Function<Content, Strategy> constructor) {
         return constructor.apply(this).split();
     }
 
     @Override
     public Monad<String> value(){
         return new Monad<>(value);
+    }
+
+    @Override
+    public boolean startsWith(String sequence) {
+        return value.startsWith(sequence);
+    }
+
+    @Override
+    public boolean endsWith(String sequence) {
+        return value.endsWith(sequence);
     }
 }
