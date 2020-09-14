@@ -1,16 +1,12 @@
 package com.meti;
 
-public class Field implements Node {
-    private final String name;
-    private final Type type;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-    public Field(String name, Type type) {
-        this.name = name;
-        this.type = type;
-    }
+public interface Field extends Renderable {
+    <R> R applyToType(Function<Type, R> mapping);
 
-    @Override
-    public String render() {
-        return type.render(name);
-    }
+    Field copy(Type type);
+
+    <R> R applyDestruction(BiFunction<String, Type, R> function);
 }

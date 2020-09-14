@@ -1,5 +1,10 @@
 package com.meti;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 public interface Type {
-    String render(String name);
+    <R> Optional<R> applyToContent(Function<Content, R> function);
+
+    Optional<String> render(String name);
 }

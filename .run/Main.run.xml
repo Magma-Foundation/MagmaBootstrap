@@ -5,7 +5,7 @@
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.meti.*" />
+        <option name="PATTERN" value="com.meti.ValueType" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

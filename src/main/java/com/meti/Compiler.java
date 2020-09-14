@@ -1,50 +1,60 @@
 package com.meti;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class Compiler {
 
     String compile(String content) {
-        if (content.startsWith("def")) {
-            int paramStart = content.indexOf('(');
-            int paramEnd = content.indexOf(')');
-            List<Field> fields = Arrays.stream(content.substring(paramStart + 1, paramEnd).trim().split(","))
-                    .filter(s -> !s.isBlank())
-                    .map(String::trim)
-                    .map(this::parseField)
-                    .collect(Collectors.toList());
-            String renderedParameters = fields.stream()
-                    .map(Field::render)
-                    .collect(Collectors.joining(",", "(", ")"));
-            String name = content.substring(4, paramStart).trim();
-            int returnStart = content.indexOf(':', paramEnd);
-            int returnEnd = content.indexOf("=>");
-            String returnString = content.substring(returnStart + 1, returnEnd).trim();
-            Type type = resolveString(returnString);
-            String renderHeader = type.render(name);
-            String value = content.substring(returnEnd + 2).trim();
-            return renderHeader + renderedParameters + value;
+        Node node = parseChild(new ContentNode(new RootContent(content)));
+        Node result = parse(node);
+        return result.render().orElseThrow();
+    }
+
+    private Node parse(Node node) {
+        Node.Prototype prototype = node.createPrototype();
+        Node.Prototype withFields = node.streamFields()
+                .map(this::resolveField)
+                .reduce(prototype, Node.Prototype::withField, (previous, next) -> next);
+        Node.Prototype withChildren = node.streamChildren()
+                .map(this::parseChild)
+                .reduce(withFields, Node.Prototype::withChild, (previous, next) -> next);
+        return withChildren.build();
+    }
+
+    private Field resolveField(Field field) {
+        Type newType = field.applyToType(this::resolve);
+        return field.copy(newType);
+    }
+
+    private Node parseChild(Node previous) {
+        return previous.applyToContent(this::parseContent)
+                .flatMap(Function.identity())
+                .orElseThrow();
+    }
+
+    private Optional<Node> parseContent(Content content) {
+        if (content.value().append("def").apply(String::startsWith)) {
+            Tokenizer<Node> tokenizer = new FunctionTokenizer(content);
+            return tokenizer.tokenize();
+        } else {
+            throw content.value().append("Cannot parse: %s")
+                    .swap().apply(String::format)
+                    .transform(IllegalArgumentException::new);
         }
-        return content;
     }
 
-    private Field parseField(String fieldString) {
-        int separator = fieldString.indexOf(':');
-        String name = fieldString.substring(0, separator).trim();
-        String typeString = fieldString.substring(separator + 1).trim();
-        Type type = resolveString(typeString);
-        return new Field(name, type);
-    }
-
-    private Type resolveString(String value) {
+    private Type resolve(Type previous) {
         Type type;
-        if (value.equals("Int")) {
+        if (previous.applyToContent(this::isInt).orElseThrow()) {
             type = IntType.IntType;
         } else {
-             type = VoidType.VoidType;
+            type = VoidType.VoidType;
         }
         return type;
+    }
+
+    private boolean isInt(Content content) {
+        return content.value().apply("Int"::equals);
     }
 }
