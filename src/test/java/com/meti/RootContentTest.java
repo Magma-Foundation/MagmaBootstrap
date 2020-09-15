@@ -1,10 +1,11 @@
 package com.meti;
 
+import com.meti.content.Content;
+import com.meti.content.RootContent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.OptionalInt;
-import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
