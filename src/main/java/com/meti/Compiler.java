@@ -13,6 +13,7 @@ import com.meti.type.Type;
 
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Compiler {
@@ -55,7 +56,13 @@ public class Compiler {
     }
 
     private Type resolve(Type previous) {
-        Type parent = new MagmaResolver(previous).resolve().orElseThrow(() -> invalidateType(previous));
+        Type parent;
+        //TODO: simplify condition
+        if (previous.applyToContent(Function.identity()).isPresent()) {
+            parent = new MagmaResolver(previous).resolve().orElseThrow(() -> invalidateType(previous));
+        } else {
+            parent = previous;
+        }
         Type.Prototype prototype = parent.createPrototype();
         Type.Prototype withFields = parent.streamFields()
                 .map(this::resolveField)

@@ -27,7 +27,7 @@ public class FunctionPreProcessable implements Processable {
     }
 
     private CallStack preprocess(Node node, CallStack stack) {
-        return node.group().test(NodeGroup.Function.matches()) ?
+        return node.group().test(NodeGroup.ConcreteFunction.matches()) ?
                 defineFields(node, stack) : stack;
     }
 

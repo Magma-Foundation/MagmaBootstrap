@@ -12,6 +12,9 @@ public class MagmaResolver extends CompoundResolver {
 
     @Override
     protected Stream<Function<Type, Resolver>> streamChildren() {
-        return Stream.of(PrimitiveResolver::new, PointerResolver::new);
+        return Stream.of(
+                StringResolver::new,
+                PrimitiveResolver::new,
+                PointerResolver::new);
     }
 }

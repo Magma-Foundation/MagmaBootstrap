@@ -4,5 +4,6 @@ public enum FieldFlag {
     CONST,
     LET,
     NATIVE,
-    IMPLICIT
+    IMPLICIT,
+    DEF
 }

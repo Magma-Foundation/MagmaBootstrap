@@ -20,7 +20,8 @@ public enum PrimitiveType implements Type {
     F64("double"),
     CHAR("char"),
     BOOL("int"),
-    VOID("void");
+    VOID("void"),
+    ANY("void");
 
     private final String value;
 

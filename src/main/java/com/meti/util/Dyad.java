@@ -1,5 +1,8 @@
 package com.meti.util;
 
+import com.meti.render.FieldFlag;
+
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
@@ -26,5 +29,9 @@ public class Dyad<A, B> {
 
     public void accept(BiConsumer<A, B> consumer) {
         consumer.accept(start, end);
+    }
+
+    public<R> Triad<A, B, R> append(R value) {
+        return new Triad<>(start, end, value);
     }
 }

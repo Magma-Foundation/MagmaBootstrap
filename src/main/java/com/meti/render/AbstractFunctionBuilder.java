@@ -6,40 +6,38 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class FunctionBuilder implements Node.Prototype {
+public class AbstractFunctionBuilder implements Node.Prototype {
     private final List<Field> fields;
-    private final Node value;
 
-    public FunctionBuilder() {
-        this(Collections.emptyList(), null);
+    public AbstractFunctionBuilder() {
+        this(Collections.emptyList());
     }
 
-    public FunctionBuilder withIdentity(Field identity) {
+    public AbstractFunctionBuilder(List<Field> fields) {
+        this.fields = new ArrayList<>(fields);
+    }
+
+    public AbstractFunctionBuilder withIdentity(Field identity) {
         if (fields.isEmpty()) fields.add(identity);
         else fields.set(0, identity);
         return this;
     }
 
-    public FunctionBuilder withParameters(List<Field> parameters){
+    public AbstractFunctionBuilder withParameters(List<Field> parameters) {
         this.fields.addAll(parameters);
         return this;
-    }
-
-    public FunctionBuilder(List<Field> fields, Node value) {
-        this.fields = new ArrayList<>(fields);
-        this.value = value;
     }
 
     @Override
     public Node.Prototype withField(Field field) {
         List<Field> newFields = new ArrayList<>(this.fields);
         newFields.add(field);
-        return new FunctionBuilder(newFields, value);
+        return new AbstractFunctionBuilder(newFields);
     }
 
     @Override
     public Node.Prototype withChild(Node child) {
-        return new FunctionBuilder(fields, child);
+        return new AbstractFunctionBuilder(fields);
     }
 
     @Override
@@ -47,12 +45,12 @@ public class FunctionBuilder implements Node.Prototype {
         if (fields.isEmpty()) {
             throw new IllegalStateException("No return type was provided.");
         } else {
-            return fields.get(0).applyDestruction(this::createNode);
+            return fields.get(0).destroy().apply(this::assemble);
         }
     }
 
-    private FunctionNode createNode(String name, Type returnType) {
+    private AbstractFunctionNode assemble(String name, Type returnType, List<FieldFlag> flags) {
         List<Field> parameters = fields.subList(1, fields.size());
-        return new FunctionNode(name, parameters, returnType, value);
+        return new AbstractFunctionNode(name, parameters, returnType, flags);
     }
 }

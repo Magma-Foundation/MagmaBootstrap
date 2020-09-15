@@ -2,7 +2,10 @@ package com.meti.render;
 
 import com.meti.type.Type;
 import com.meti.util.Monad;
+import com.meti.util.Triad;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -10,10 +13,12 @@ import java.util.function.Function;
 public class InlineField implements Field {
     private final String name;
     private final Type type;
+    private final List<FieldFlag> flags;
 
-    public InlineField(String name, Type type) {
+    public InlineField(String name, Type type, List<FieldFlag> flags) {
         this.name = name;
         this.type = type;
+        this.flags = flags;
     }
 
     @Override
@@ -23,7 +28,7 @@ public class InlineField implements Field {
 
     @Override
     public Field copy(Type type) {
-        return new InlineField(name, type);
+        return new InlineField(name, type, flags);
     }
 
     @Override
@@ -42,7 +47,12 @@ public class InlineField implements Field {
     }
 
     @Override
-    public Monad<String> name(){
+    public Monad<String> name() {
         return new Monad<>(name);
+    }
+
+    @Override
+    public Triad<String, Type, List<FieldFlag>> destroy() {
+        return new Triad<>(name, type, flags);
     }
 }
