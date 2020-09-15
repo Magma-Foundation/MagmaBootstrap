@@ -60,4 +60,9 @@ class FunctionNode implements Node {
     public Stream<Node> streamChildren() {
         return Stream.of(value);
     }
+
+    @Override
+    public Monad<NodeGroup> group(){
+        return new Monad<>(NodeGroup.Function);
+    }
 }

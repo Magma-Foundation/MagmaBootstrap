@@ -78,5 +78,10 @@ public class ReturnTokenizer extends AbstractTokenizer {
         public Optional<String> render() {
             return Optional.of("return " + value.render().orElseThrow() + ";");
         }
+
+        @Override
+        public Monad<NodeGroup> group(){
+            return new Monad<>(NodeGroup.Return);
+        }
     }
 }

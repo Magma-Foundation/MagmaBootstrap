@@ -32,4 +32,9 @@ public class InlineField implements Field {
     public Optional<String> render() {
         return type.render(name);
     }
+
+    @Override
+    public <R> R applyToName(Function<String, R> mapping) {
+        return mapping.apply(name);
+    }
 }

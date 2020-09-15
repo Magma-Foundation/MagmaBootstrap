@@ -61,6 +61,11 @@ class BlockNode implements Node {
         .collect(Collectors.joining("", "{", "}")));
     }
 
+    @Override
+    public Monad<NodeGroup> group(){
+         return new Monad<>(NodeGroup.Block);
+    }
+
     private static class BlockPrototype implements Prototype {
         private final List<Node> children;
 

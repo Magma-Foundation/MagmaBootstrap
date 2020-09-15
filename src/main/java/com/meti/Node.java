@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 public interface Node extends Renderable {
     <R> Optional<R> applyToContent(Function<Content, R> function);
 
+    Monad<NodeGroup> group();
+
     Stream<Field> streamFields();
 
     Stream<Node> streamChildren();

@@ -48,4 +48,9 @@ public class ContentNode implements Node {
     public Stream<Node> streamChildren() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Monad<NodeGroup> group(){
+        throw new UnsupportedOperationException();
+    }
 }

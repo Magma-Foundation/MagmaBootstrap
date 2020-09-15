@@ -61,6 +61,11 @@ public class IntegerTokenizer extends AbstractTokenizer {
             return Optional.of(String.valueOf(value));
         }
 
+        @Override
+        public Monad<NodeGroup> group(){
+            return new Monad<>(NodeGroup.Integer);
+        }
+
         private class IntPrototype implements Prototype {
             @Override
             public Prototype withField(Field field) {

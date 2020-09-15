@@ -12,6 +12,10 @@ public class Dyad<A, B> {
         this.end = end;
     }
 
+    public <R> Monad<R> map(BiFunction<A, B, R> function) {
+        return new Monad<>(function.apply(start, end));
+    }
+
     public <R> R apply(BiFunction<A, B, R> function) {
         return function.apply(start, end);
     }

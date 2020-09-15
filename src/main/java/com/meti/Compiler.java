@@ -6,7 +6,10 @@ public class Compiler {
 
     String compile(String content) {
         Node node = parseChild(new ContentNode(new RootContent(content)));
-        return node.render().orElseThrow();
+        Processor processor = new MagmaProcessor();
+        return processor.process(node)
+                .apply(Node::render)
+                .orElseThrow();
     }
 
     private Field resolveField(Field field) {
@@ -51,4 +54,5 @@ public class Compiler {
     private boolean isInt(Content content) {
         return content.value().apply("Int"::equals);
     }
+
 }
