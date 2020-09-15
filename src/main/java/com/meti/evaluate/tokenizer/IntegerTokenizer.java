@@ -1,4 +1,4 @@
-package com.meti.evaluate;
+package com.meti.evaluate.tokenizer;
 
 import com.meti.util.Monad;
 import com.meti.render.NodeGroup;
@@ -35,7 +35,7 @@ public class IntegerTokenizer extends AbstractTokenizer {
         }
     }
 
-    private static class IntNode implements Node {
+    private static class IntNode extends LeafNode {
         private final int value;
 
         public IntNode(int value) {

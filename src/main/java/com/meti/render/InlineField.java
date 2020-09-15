@@ -1,6 +1,7 @@
 package com.meti.render;
 
 import com.meti.type.Type;
+import com.meti.util.Monad;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -38,5 +39,10 @@ public class InlineField implements Field {
     @Override
     public <R> R applyToName(Function<String, R> mapping) {
         return mapping.apply(name);
+    }
+
+    @Override
+    public Monad<String> name(){
+        return new Monad<>(name);
     }
 }

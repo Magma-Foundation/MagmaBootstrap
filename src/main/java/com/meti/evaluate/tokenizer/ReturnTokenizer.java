@@ -1,11 +1,8 @@
-package com.meti.evaluate;
+package com.meti.evaluate.tokenizer;
 
+import com.meti.render.*;
 import com.meti.util.Monad;
-import com.meti.render.NodeGroup;
 import com.meti.content.Content;
-import com.meti.render.ContentNode;
-import com.meti.render.Field;
-import com.meti.render.Node;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -54,7 +51,7 @@ public class ReturnTokenizer extends AbstractTokenizer {
         }
     }
 
-    private static class ReturnNode implements Node {
+    private static class ReturnNode extends ParentNode {
         private final Node value;
 
         public ReturnNode(Node value) {

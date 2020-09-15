@@ -28,4 +28,6 @@ public interface Content {
     boolean isPresent();
 
     OptionalInt indexFrom(String sequence, int end);
+
+    OptionalInt lastIndex(String sequence);
 }

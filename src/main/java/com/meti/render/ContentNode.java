@@ -56,4 +56,9 @@ public class ContentNode implements Node {
     public Monad<NodeGroup> group(){
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public boolean isParent() {
+        throw new UnsupportedOperationException();
+    }
 }

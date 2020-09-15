@@ -2,9 +2,9 @@ package com.meti;
 
 import com.meti.content.Content;
 import com.meti.content.RootContent;
-import com.meti.evaluate.BlockTokenizer;
+import com.meti.evaluate.tokenizer.BlockTokenizer;
 import com.meti.evaluate.Evaluator;
-import com.meti.evaluate.RootTokenizer;
+import com.meti.evaluate.tokenizer.RootTokenizer;
 import com.meti.render.BlockNode;
 import com.meti.render.ContentNode;
 import com.meti.render.Node;

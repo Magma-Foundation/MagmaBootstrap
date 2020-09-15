@@ -1,4 +1,4 @@
-package com.meti.evaluate;
+package com.meti.evaluate.tokenizer;
 
 import com.meti.content.Content;
 

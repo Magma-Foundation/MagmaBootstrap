@@ -13,8 +13,21 @@ class ImmutableFrame implements Frame {
         this(Collections.emptyList());
     }
 
+
     ImmutableFrame(List<Field> fields) {
         this.fields = new ArrayList<>(fields);
+    }
+
+    @Override
+    public String toString() {
+        List<String> names = fields.stream().reduce(new ArrayList<>(), this::merge, (oldList, newList) -> newList);
+        String joinedNames = String.join(",", names);
+        return String.format("[%s]", joinedNames);
+    }
+
+    private List<String> merge(List<String> strings, Field field) {
+        field.applyToName(strings::add);
+        return strings;
     }
 
     @Override
@@ -24,7 +37,7 @@ class ImmutableFrame implements Frame {
     }
 
     @Override
-    public boolean isDefined(String name){
+    public boolean isDefined(String name) {
         return fields.stream().anyMatch(field -> isNamed(field, name));
     }
 

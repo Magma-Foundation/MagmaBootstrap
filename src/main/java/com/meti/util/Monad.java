@@ -30,4 +30,8 @@ public class Monad<T> {
     public <R> Dyad<T, R> extract(Function<T, R> function) {
         return new Dyad<>(value, function.apply(value));
     }
+
+    public <R> Monad<R> map(Function<T, R> function) {
+        return new Monad<>(function.apply(value));
+    }
 }

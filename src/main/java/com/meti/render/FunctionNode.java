@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class FunctionNode implements Node {
+class FunctionNode extends ParentNode {
     private final Type returnType;
     private final String name;
     private final List<Field> parameters;

@@ -21,28 +21,33 @@ public class ChildContent implements Content {
     }
 
     @Override
+    public String toString() {
+        return prepare();
+    }
+
+    @Override
     public Content slice(int start, int end) {
-        String child = value.substring(start, end);
+        String child = prepare().substring(start, end);
         String formatted = child.trim();
         return new ChildContent(this, formatted, start, end);
     }
 
     @Override
-    public OptionalInt index(String sequence){
-        int index = value.indexOf(sequence);
-        if(index == -1) return OptionalInt.empty();
+    public OptionalInt index(String sequence) {
+        int index = prepare().indexOf(sequence);
+        if (index == -1) return OptionalInt.empty();
         else return OptionalInt.of(index);
     }
 
     @Override
     public Content sliceToEnd(int start) {
-        return slice(start, value.length());
+        return slice(start, prepare().length());
     }
 
     @Override
-    public OptionalInt indexFrom(String sequence, int end){
-        int index = value.indexOf(sequence, end);
-        if(index == -1) return OptionalInt.empty();
+    public OptionalInt indexFrom(String sequence, int end) {
+        int index = prepare().indexOf(sequence, end);
+        if (index == -1) return OptionalInt.empty();
         else return OptionalInt.of(index);
     }
 
@@ -50,27 +55,27 @@ public class ChildContent implements Content {
     public boolean equals(Object o) {
         if (this == o) return true;
         Content that = (Content) o;
-        return that.value().apply(value::equals);
+        return that.value().apply(prepare()::equals);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(parent, value, start, end);
+        return Objects.hash(parent, prepare(), start, end);
     }
 
     @Override
     public boolean isPresent() {
-        return !value.isBlank();
+        return !prepare().isBlank();
     }
 
     @Override
-    public int length(){
-        return value.length();
+    public int length() {
+        return prepare().length();
     }
 
     @Override
-    public char apply(int index){
-        return value.charAt(index);
+    public char apply(int index) {
+        return prepare().charAt(index);
     }
 
     @Override
@@ -79,17 +84,28 @@ public class ChildContent implements Content {
     }
 
     @Override
-    public Monad<String> value(){
-        return new Monad<>(value);
+    public Monad<String> value() {
+        return new Monad<>(prepare());
     }
 
     @Override
     public boolean startsWith(String sequence) {
-        return value.startsWith(sequence);
+        return prepare().startsWith(sequence);
     }
 
     @Override
     public boolean endsWith(String sequence) {
-        return value.endsWith(sequence);
+        return prepare().endsWith(sequence);
+    }
+
+    @Override
+    public OptionalInt lastIndex(String sequence){
+        int index = prepare().lastIndexOf(sequence);
+        if(index == -1) return OptionalInt.empty();
+        else return OptionalInt.of(index);
+    }
+
+    public String prepare() {
+        return value.trim();
     }
 }

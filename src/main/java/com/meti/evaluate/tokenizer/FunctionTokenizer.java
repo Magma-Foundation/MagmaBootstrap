@@ -1,8 +1,9 @@
-package com.meti.evaluate;
+package com.meti.evaluate.tokenizer;
 
 import com.meti.content.Strategy;
 import com.meti.content.ChildContent;
 import com.meti.content.Content;
+import com.meti.evaluate.FieldEvaluator;
 import com.meti.render.*;
 import com.meti.type.ContentType;
 import com.meti.type.Type;

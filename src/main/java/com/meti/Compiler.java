@@ -2,16 +2,17 @@ package com.meti;
 
 import com.meti.content.Content;
 import com.meti.content.RootContent;
-import com.meti.evaluate.RootTokenizer;
+import com.meti.evaluate.tokenizer.RootTokenizer;
 import com.meti.process.MagmaProcessor;
 import com.meti.process.Processor;
 import com.meti.render.ContentNode;
 import com.meti.render.Field;
 import com.meti.render.Node;
-import com.meti.type.IntType;
+import com.meti.resolve.MagmaResolver;
 import com.meti.type.Type;
-import com.meti.type.VoidType;
 
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Supplier;
 
 public class Compiler {
@@ -54,17 +55,27 @@ public class Compiler {
     }
 
     private Type resolve(Type previous) {
-        Type type;
-        if (previous.applyToContent(this::isInt).orElseThrow()) {
-            type = IntType.IntType;
-        } else {
-            type = VoidType.VoidType;
-        }
-        return type;
+        Type parent = new MagmaResolver(previous).resolve().orElseThrow(() -> invalidateType(previous));
+        Type.Prototype prototype = parent.createPrototype();
+        Type.Prototype withFields = parent.streamFields()
+                .map(this::resolveField)
+                .reduce(prototype, Type.Prototype::withField, (oldPrototype, newPrototype) -> newPrototype);
+        Type.Prototype withChildren = parent.streamChildren()
+                .map(this::resolve)
+                .reduce(withFields, Type.Prototype::withChild, (oldPrototype, newPrototype) -> newPrototype);
+        return withChildren.build();
     }
 
-    private boolean isInt(Content content) {
-        return content.value().apply("Int"::equals);
+    private CompileException invalidateType(Type previous) {
+        return previous.applyToContent(this::invalidateType).orElseThrow();
     }
 
+    private CompileException invalidateType(Content content) {
+        return content.value().apply(Compiler.this::invalidateType);
+    }
+
+    private CompileException invalidateType(String s) {
+        String message = String.format("Unable to resolve type: %s", s);
+        return new CompileException(message);
+    }
 }

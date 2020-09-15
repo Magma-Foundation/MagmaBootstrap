@@ -11,11 +11,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BlockNode implements Node {
+public class BlockNode extends ParentNode {
     private final List<Node> children;
 
     public BlockNode(Node... children) {
         this(List.of(children));
+    }
+
+    public BlockNode(List<Node> children) {
+        this.children = children;
     }
 
     @Override
@@ -30,10 +34,6 @@ public class BlockNode implements Node {
     @Override
     public int hashCode() {
         return Objects.hash(children);
-    }
-
-    public BlockNode(List<Node> children) {
-        this.children = children;
     }
 
     @Override
@@ -59,14 +59,14 @@ public class BlockNode implements Node {
     @Override
     public Optional<String> render() {
         return Optional.of(children.stream()
-        .map(Node::render)
+                .map(Node::render)
                 .flatMap(Optional::stream)
-        .collect(Collectors.joining("", "{", "}")));
+                .collect(Collectors.joining("", "{", "}")));
     }
 
     @Override
-    public Monad<NodeGroup> group(){
-         return new Monad<>(NodeGroup.Block);
+    public Monad<NodeGroup> group() {
+        return new Monad<>(NodeGroup.Block);
     }
 
     private static class BlockPrototype implements Prototype {

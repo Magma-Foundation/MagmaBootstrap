@@ -1,4 +1,4 @@
-package com.meti.evaluate;
+package com.meti.evaluate.tokenizer;
 
 import com.meti.util.Monad;
 import com.meti.render.NodeGroup;
@@ -20,7 +20,7 @@ public class VariableTokenizer extends AbstractTokenizer {
         return Optional.of(new VariableNode(content));
     }
 
-    private static class VariableNode implements Node {
+    private static class VariableNode extends LeafNode {
         private final Content content;
 
         public VariableNode(Content content) {

@@ -87,4 +87,9 @@ public class RootContent implements Content {
     public boolean endsWith(String sequence) {
         return value.endsWith(sequence);
     }
+
+    @Override
+    public OptionalInt lastIndex(String sequence){
+        throw new UnsupportedOperationException();
+    }
 }

@@ -5,6 +5,7 @@ import com.meti.render.Field;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ImmutableCallStack implements CallStack {
     private final Deque<Frame> frames;
@@ -15,6 +16,13 @@ public class ImmutableCallStack implements CallStack {
 
     public ImmutableCallStack(Deque<Frame> frames) {
         this.frames = frames;
+    }
+
+    @Override
+    public String toString() {
+        return frames.stream()
+                .map(Frame::toString)
+                .collect(Collectors.joining(",", "[", "]"));
     }
 
     private Frame popLast(){
