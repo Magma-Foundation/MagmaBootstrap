@@ -2,6 +2,7 @@ package com.meti.type;
 
 import com.meti.content.Content;
 import com.meti.render.Field;
+import com.meti.util.Monad;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -52,6 +53,11 @@ public enum PrimitiveType implements Type {
     @Override
     public Stream<Field> streamFields() {
         return Stream.empty();
+    }
+
+    @Override
+    public Monad<TypeGroup> group(){
+        throw new UnsupportedOperationException();
     }
 
     private class PrimitivePrototype implements Prototype {

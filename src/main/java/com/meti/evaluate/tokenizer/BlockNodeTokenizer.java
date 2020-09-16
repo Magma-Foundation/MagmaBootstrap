@@ -51,6 +51,7 @@ public class BlockNodeTokenizer extends AbstractNodeTokenizer {
                     complete();
                 } else if (c == '}' && depth == 1) {
                     buffer.append('}');
+                    depth--;
                     complete();
                 } else {
                     if (c == '{') depth++;

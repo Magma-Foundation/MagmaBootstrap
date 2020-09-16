@@ -15,6 +15,7 @@ public class MagmaTypeTokenizer extends CompoundTypeTokenizer {
         return Stream.of(
                 StringTypeTokenizer::new,
                 PrimitiveTypeTokenizer::new,
-                PointerTypeTokenizer::new);
+                PointerTypeTokenizer::new,
+                StructTypeTokenizer::new);
     }
 }

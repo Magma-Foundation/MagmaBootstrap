@@ -15,6 +15,8 @@ public class MagmaNodeTokenizer extends CollectiveNodeTokenizer {
     @Override
     protected Stream<Function<Content, Evaluator<Node>>> streamFactories() {
         return Stream.of(
+                ConstructionTokenizer::new,
+                StructureNodeTokenizer::new,
                 DereferenceNodeTokenizer::new,
                 ReferenceNodeTokenizer::new,
                 ReturnNodeTokenizer::new,
@@ -23,6 +25,7 @@ public class MagmaNodeTokenizer extends CollectiveNodeTokenizer {
                 FunctionNodeTokenizer::new,
                 IntegerNodeTokenizer::new,
                 DeclareNodeTokenizer::new,
+                FieldNodeTokenizer::new,
                 VariableNodeTokenizer::new
         );
     }

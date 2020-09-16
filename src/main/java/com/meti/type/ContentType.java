@@ -2,6 +2,7 @@ package com.meti.type;
 
 import com.meti.content.Content;
 import com.meti.render.Field;
+import com.meti.util.Monad;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -37,5 +38,10 @@ public class ContentType implements Type {
     @Override
     public Stream<Field> streamFields(){
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Monad<TypeGroup> group(){
+        return new Monad<>(TypeGroup.Content);
     }
 }

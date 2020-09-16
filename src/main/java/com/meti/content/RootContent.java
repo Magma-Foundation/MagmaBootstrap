@@ -10,6 +10,11 @@ import java.util.stream.Stream;
 public class RootContent implements Content {
     private final String value;
 
+    @Override
+    public String toString() {
+        return formattedValue();
+    }
+
     public RootContent(String value) {
         this.value = value;
     }
@@ -18,54 +23,54 @@ public class RootContent implements Content {
     public boolean equals(Object o) {
         if (this == o) return true;
         Content that = (Content) o;
-        return that.value().apply(value::equals);
+        return that.value().apply(formattedValue()::equals);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(formattedValue());
     }
 
     @Override
     public Content slice(int start, int end) {
-        String child = value.substring(start, end);
+        String child = formattedValue().substring(start, end);
         String formatted = child.trim();
         return new ChildContent(this, formatted, start, end);
     }
 
     @Override
     public OptionalInt index(String sequence) {
-        int index = value.indexOf(sequence);
+        int index = formattedValue().indexOf(sequence);
         if(index == -1) return OptionalInt.empty();
         else return OptionalInt.of(index);
     }
 
     @Override
     public Content sliceToEnd(int start) {
-        int length = value.length();
+        int length = formattedValue().length();
         return slice(start, length);
     }
 
     @Override
     public OptionalInt indexFrom(String sequence, int end){
-        int index = value.indexOf(sequence, end);
+        int index = formattedValue().indexOf(sequence, end);
         if(index == -1) return OptionalInt.empty();
         return OptionalInt.of(index);
     }
 
     @Override
     public boolean isPresent() {
-        return !value.isBlank();
+        return !formattedValue().isBlank();
     }
 
     @Override
     public int length(){
-        return value.length();
+        return formattedValue().length();
     }
 
     @Override
     public char apply(int index){
-        return value.charAt(index);
+        return formattedValue().charAt(index);
     }
 
     @Override
@@ -75,17 +80,21 @@ public class RootContent implements Content {
 
     @Override
     public Monad<String> value(){
-        return new Monad<>(value);
+        return new Monad<>(formattedValue());
+    }
+
+    private String formattedValue() {
+        return value.trim();
     }
 
     @Override
     public boolean startsWith(String sequence) {
-        return value.startsWith(sequence);
+        return formattedValue().startsWith(sequence);
     }
 
     @Override
     public boolean endsWith(String sequence) {
-        return value.endsWith(sequence);
+        return formattedValue().endsWith(sequence);
     }
 
     @Override

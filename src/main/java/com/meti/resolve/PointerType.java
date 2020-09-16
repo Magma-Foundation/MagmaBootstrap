@@ -3,6 +3,8 @@ package com.meti.resolve;
 import com.meti.content.Content;
 import com.meti.render.Field;
 import com.meti.type.Type;
+import com.meti.type.TypeGroup;
+import com.meti.util.Monad;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -38,5 +40,10 @@ class PointerType implements Type {
     @Override
     public Stream<Field> streamFields() {
         return Stream.empty();
+    }
+
+    @Override
+    public Monad<TypeGroup> group(){
+        throw new UnsupportedOperationException();
     }
 }

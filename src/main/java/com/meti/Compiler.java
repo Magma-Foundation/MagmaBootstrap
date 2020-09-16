@@ -10,6 +10,7 @@ import com.meti.render.Field;
 import com.meti.render.Node;
 import com.meti.resolve.MagmaTypeTokenizer;
 import com.meti.type.Type;
+import com.meti.type.TypeGroup;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -57,7 +58,7 @@ public class Compiler {
     private Type resolve(Type previous) {
         Type parent;
         //TODO: simplify condition
-        if (previous.applyToContent(Function.identity()).isPresent()) {
+        if (previous.applyToContent(Function.identity()).isPresent() && previous.group().test(TypeGroup.Content.matches())) {
             parent = new MagmaTypeTokenizer(previous).tokenize().orElseThrow(() -> invalidateType(previous));
         } else {
             parent = previous;
