@@ -8,13 +8,13 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class PrimitiveResolver extends AbstractResolver {
-    public PrimitiveResolver(Type previous) {
+public class PrimitiveTypeTokenizer extends AbstractTypeTokenizer {
+    public PrimitiveTypeTokenizer(Type previous) {
         super(previous);
     }
 
     @Override
-    public Optional<Type> resolve() {
+    public Optional<Type> tokenize() {
         return previous.applyToContent(this::find).flatMap(Function.identity());
     }
 

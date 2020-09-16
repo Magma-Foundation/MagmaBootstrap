@@ -11,11 +11,11 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class IntegerTokenizer extends AbstractTokenizer {
+public class IntegerNodeTokenizer extends AbstractNodeTokenizer {
     public static final BigInteger START = BigInteger.valueOf(-32767);
     public static final BigInteger END = BigInteger.valueOf(32767);
 
-    public IntegerTokenizer(Content content) {
+    public IntegerNodeTokenizer(Content content) {
         super(content);
     }
 

@@ -33,4 +33,9 @@ public class InlineState implements State {
     public State with(Node node) {
         return new InlineState(node, stack);
     }
+
+    @Override
+    public Monad<CallStack> stack() {
+        return new Monad<>(stack);
+    }
 }

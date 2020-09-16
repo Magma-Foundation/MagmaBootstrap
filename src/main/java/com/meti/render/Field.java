@@ -20,4 +20,6 @@ public interface Field extends Renderable {
     Triad<String, Type, List<FieldFlag>> destroy();
 
     <R> R applyToName(Function<String, R> mapping);
+
+    Monad<Type> type();
 }

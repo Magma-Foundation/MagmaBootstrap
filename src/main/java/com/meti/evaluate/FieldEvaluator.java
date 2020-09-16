@@ -24,7 +24,8 @@ public class FieldEvaluator implements Evaluator<Field> {
             Field field = formatWithType(separatorOptional.orElseThrow());
             return Optional.of(field);
         } else {
-            throw new UnsupportedOperationException("Implicit fields aren't supported yet.");
+            String message = String.format("Implicit fields aren't supported yet in '%s'", content);
+            throw new UnsupportedOperationException(message);
         }
     }
 

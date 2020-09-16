@@ -13,8 +13,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BlockTokenizer extends AbstractTokenizer {
-    public BlockTokenizer(Content content) {
+public class BlockNodeTokenizer extends AbstractNodeTokenizer {
+    public BlockNodeTokenizer(Content content) {
         super(content);
     }
 

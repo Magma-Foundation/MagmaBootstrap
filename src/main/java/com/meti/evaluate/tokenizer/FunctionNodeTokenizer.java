@@ -1,5 +1,6 @@
 package com.meti.evaluate.tokenizer;
 
+import com.meti.CompileException;
 import com.meti.content.ChildContent;
 import com.meti.content.Content;
 import com.meti.content.Strategy;
@@ -13,8 +14,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FunctionTokenizer extends AbstractTokenizer {
-    public FunctionTokenizer(Content content) {
+public class FunctionNodeTokenizer extends AbstractNodeTokenizer {
+    public FunctionNodeTokenizer(Content content) {
         super(content);
     }
 
@@ -40,11 +41,7 @@ public class FunctionTokenizer extends AbstractTokenizer {
         if (separatorOptional.isPresent()) {
             int separator = separatorOptional.getAsInt();
             name = keyString.sliceToEnd(separator + 1);
-            flags = keyString.slice(0, separator)
-                    .split(FlagStrategy::new)
-                    .filter(Content::isPresent)
-                    .map(this::getApply)
-                    .collect(Collectors.toList());
+            flags = parseFlags(keyString, separator);
         } else {
             name = content;
             flags = Collections.emptyList();
@@ -68,7 +65,19 @@ public class FunctionTokenizer extends AbstractTokenizer {
         }
     }
 
-    private FieldFlag getApply(Content content) {
+    public List<FieldFlag> parseFlags(Content keyString, int separator) {
+        try {
+            return keyString.slice(0, separator)
+                    .split(FlagStrategy::new)
+                    .filter(Content::isPresent)
+                    .map(this::mapToFlag)
+                    .collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            throw new CompileException("Invalid flags in " + keyString, e);
+        }
+    }
+
+    private FieldFlag mapToFlag(Content content) {
         return content.value().map(String::toUpperCase).apply(FieldFlag::valueOf);
     }
 

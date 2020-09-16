@@ -1,9 +1,17 @@
 package com.meti.process;
 
 import com.meti.evaluate.processable.Processable;
+import com.meti.render.Field;
 import com.meti.render.Node;
 import com.meti.stack.ImmutableCallStack;
 import com.meti.util.Monad;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class RecursiveProcessor implements Processor {
     protected abstract Processable createPreProcessable(State tree);
@@ -41,10 +49,21 @@ public abstract class RecursiveProcessor implements Processor {
         return createPreProcessable(state).evaluate().orElse(state);
     }
 
-    private State processChildren(State preprocessed) {
-        Monad<Node> parent = preprocessed.node();
-        State withFinalChild = parent.apply(Node::streamChildren).reduce(preprocessed, this::processChild, (state1, state2) -> state2);
-        return parent.apply(withFinalChild::with);
+    private State processChildren(State parentState) {
+        Monad<Node> parent = parentState.node();
+        Node.Prototype prototype = parent.apply(Node::createPrototype);
+        State current = parentState;
+        List<Field> fields = parent.apply(Node::streamFields).collect(Collectors.toList());
+        Node.Prototype withFields = fields.stream().reduce(prototype, Node.Prototype::withField, (oldPrototype, newPrototype) -> oldPrototype);
+        List<Node> oldChildren = parent.apply(Node::streamChildren).collect(Collectors.toList());
+        List<Node> newChildren = new ArrayList<>();
+        for (Node oldChild : oldChildren) {
+            current = processChild(current, oldChild);
+            current.node().accept(newChildren::add);
+        }
+        Node.Prototype withChildren = newChildren.stream().reduce(withFields, Node.Prototype::withChild, (oldPrototype, newPrototype) -> newPrototype);
+        Node built = withChildren.build();
+        return current.with(built);
     }
 
     private State processChild(State parentState, Node child) {

@@ -1,6 +1,7 @@
 package com.meti.util;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -33,5 +34,9 @@ public class Monad<T> {
 
     public <R> Monad<R> map(Function<T, R> function) {
         return new Monad<>(function.apply(value));
+    }
+
+    public void accept(Consumer<T> action) {
+        action.accept(value);
     }
 }

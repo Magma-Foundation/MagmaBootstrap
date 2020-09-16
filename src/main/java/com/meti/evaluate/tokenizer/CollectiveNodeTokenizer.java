@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public abstract class CollectiveTokenizer extends AbstractTokenizer {
-    public CollectiveTokenizer(Content content) {
+public abstract class CollectiveNodeTokenizer extends AbstractNodeTokenizer {
+    public CollectiveNodeTokenizer(Content content) {
         super(content);
     }
 

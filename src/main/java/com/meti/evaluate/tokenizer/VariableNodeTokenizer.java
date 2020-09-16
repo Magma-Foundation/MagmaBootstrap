@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class VariableTokenizer extends AbstractTokenizer {
-    public VariableTokenizer(Content content) {
+public class VariableNodeTokenizer extends AbstractNodeTokenizer {
+    public VariableNodeTokenizer(Content content) {
         super(content);
     }
 
@@ -44,7 +44,7 @@ public class VariableTokenizer extends AbstractTokenizer {
 
         @Override
         public Prototype createPrototype() {
-            return new VariableTokenizer.VariablePrototype(content);
+            return new VariableNodeTokenizer.VariablePrototype(content);
         }
 
         @Override

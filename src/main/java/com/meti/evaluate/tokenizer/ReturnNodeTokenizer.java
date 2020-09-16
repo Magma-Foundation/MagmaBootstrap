@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class ReturnTokenizer extends AbstractTokenizer {
-    public ReturnTokenizer(Content content) {
+public class ReturnNodeTokenizer extends AbstractNodeTokenizer {
+    public ReturnNodeTokenizer(Content content) {
         super(content);
     }
 

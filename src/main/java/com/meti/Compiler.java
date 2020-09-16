@@ -2,28 +2,27 @@ package com.meti;
 
 import com.meti.content.Content;
 import com.meti.content.RootContent;
-import com.meti.evaluate.tokenizer.RootTokenizer;
+import com.meti.evaluate.tokenizer.MagmaNodeTokenizer;
 import com.meti.process.MagmaProcessor;
 import com.meti.process.Processor;
 import com.meti.render.ContentNode;
 import com.meti.render.Field;
 import com.meti.render.Node;
-import com.meti.resolve.MagmaResolver;
+import com.meti.resolve.MagmaTypeTokenizer;
 import com.meti.type.Type;
 
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Compiler {
-
     String compile(String content) {
-        Node node = parseChild(new ContentNode(new RootContent(content)));
+        Node root = new ContentNode(new RootContent("{" + content + "}"));
+        Node tree = tokenize(root);
         Processor processor = new MagmaProcessor();
-        return processor.process(node)
+        String output = processor.process(tree)
                 .apply(Node::render)
                 .orElseThrow();
+        return output.substring(1, output.length() - 1);
     }
 
     private Field resolveField(Field field) {
@@ -31,20 +30,20 @@ public class Compiler {
         return field.copy(newType);
     }
 
-    private Node parseChild(Node previous) {
+    private Node tokenize(Node previous) {
         Node node = previous.applyToContent(this::parseContent).orElseThrow();
         Node.Prototype prototype = node.createPrototype();
         Node.Prototype withFields = node.streamFields()
                 .map(this::resolveField)
                 .reduce(prototype, Node.Prototype::withField, (previous1, next) -> next);
         Node.Prototype withChildren = node.streamChildren()
-                .map(this::parseChild)
+                .map(this::tokenize)
                 .reduce(withFields, Node.Prototype::withChild, (previous1, next) -> next);
         return withChildren.build();
     }
 
     private Node parseContent(Content content) {
-        return new RootTokenizer(content)
+        return new MagmaNodeTokenizer(content)
                 .evaluate()
                 .orElseThrow(supplyInvalidParse(content));
     }
@@ -59,7 +58,7 @@ public class Compiler {
         Type parent;
         //TODO: simplify condition
         if (previous.applyToContent(Function.identity()).isPresent()) {
-            parent = new MagmaResolver(previous).resolve().orElseThrow(() -> invalidateType(previous));
+            parent = new MagmaTypeTokenizer(previous).tokenize().orElseThrow(() -> invalidateType(previous));
         } else {
             parent = previous;
         }

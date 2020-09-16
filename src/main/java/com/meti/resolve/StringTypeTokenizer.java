@@ -7,13 +7,13 @@ import com.meti.type.Type;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class StringResolver extends AbstractResolver {
-    public StringResolver(Type previous) {
+public class StringTypeTokenizer extends AbstractTypeTokenizer {
+    public StringTypeTokenizer(Type previous) {
         super(previous);
     }
 
     @Override
-    public Optional<Type> resolve() {
+    public Optional<Type> tokenize() {
         return previous.applyToContent(this::isString).flatMap(Function.identity());
     }
 

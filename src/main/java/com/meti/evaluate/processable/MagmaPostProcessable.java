@@ -12,6 +12,9 @@ public class MagmaPostProcessable extends CollectiveProcessable{
 
     @Override
     protected Stream<Function<State, Processable>> streamPreprocessors() {
-        return Stream.of(DeclarePostProcessable::new);
+        return Stream.of(
+                DeclarePostProcessable::new,
+                ProcedureFixer::new
+        );
     }
 }

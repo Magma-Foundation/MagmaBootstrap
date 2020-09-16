@@ -60,7 +60,7 @@ public class BlockNode extends ParentNode {
     public Optional<String> render() {
         return Optional.of(children.stream()
                 .map(Node::render)
-                .flatMap(Optional::stream)
+                .map(Optional::orElseThrow)
                 .collect(Collectors.joining("", "{", "}")));
     }
 

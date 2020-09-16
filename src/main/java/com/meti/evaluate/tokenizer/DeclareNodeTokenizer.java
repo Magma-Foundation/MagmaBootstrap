@@ -12,8 +12,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class DeclareTokenizer extends AbstractTokenizer {
-    public DeclareTokenizer(Content content) {
+public class DeclareNodeTokenizer extends AbstractNodeTokenizer {
+    public DeclareNodeTokenizer(Content content) {
         super(content);
     }
 

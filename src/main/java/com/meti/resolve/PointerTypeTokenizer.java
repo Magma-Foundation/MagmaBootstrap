@@ -7,13 +7,13 @@ import com.meti.type.Type;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class PointerResolver extends AbstractResolver {
-    public PointerResolver(Type previous) {
+public class PointerTypeTokenizer extends AbstractTypeTokenizer {
+    public PointerTypeTokenizer(Type previous) {
         super(previous);
     }
 
     @Override
-    public Optional<Type> resolve() {
+    public Optional<Type> tokenize() {
         return previous.applyToContent(this::resolveContent)
                 .flatMap(Function.identity());
     }

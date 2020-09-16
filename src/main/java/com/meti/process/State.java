@@ -13,4 +13,6 @@ public interface State {
     State with(CallStack stack);
 
     State with(Node node);
+
+    Monad<CallStack> stack();
 }

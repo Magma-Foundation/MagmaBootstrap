@@ -1,10 +1,13 @@
 package com.meti.stack;
 
 import com.meti.render.Field;
+import com.meti.type.Type;
+import com.meti.util.Monad;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 class ImmutableFrame implements Frame {
     private final List<Field> fields;
@@ -39,6 +42,14 @@ class ImmutableFrame implements Frame {
     @Override
     public boolean isDefined(String name) {
         return fields.stream().anyMatch(field -> isNamed(field, name));
+    }
+
+    @Override
+    public Optional<Monad<Type>> resolve(String name) {
+        return fields.stream()
+                .filter(field -> isNamed(field, name))
+                .map(Field::type)
+                .findFirst();
     }
 
     private boolean isNamed(Field field, String name) {

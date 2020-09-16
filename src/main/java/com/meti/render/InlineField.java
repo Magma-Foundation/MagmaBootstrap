@@ -4,7 +4,6 @@ import com.meti.type.Type;
 import com.meti.util.Monad;
 import com.meti.util.Triad;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -54,5 +53,10 @@ public class InlineField implements Field {
     @Override
     public Triad<String, Type, List<FieldFlag>> destroy() {
         return new Triad<>(name, type, flags);
+    }
+
+    @Override
+    public Monad<Type> type() {
+        return new Monad<>(type);
     }
 }
