@@ -101,4 +101,9 @@ public class RootContent implements Content {
     public OptionalInt lastIndex(String sequence){
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
 }

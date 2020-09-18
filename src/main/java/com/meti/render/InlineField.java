@@ -4,6 +4,7 @@ import com.meti.type.Type;
 import com.meti.util.Monad;
 import com.meti.util.Triad;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -13,6 +14,10 @@ public class InlineField implements Field {
     private final String name;
     private final Type type;
     private final List<FieldFlag> flags;
+
+    public InlineField(Type type) {
+        this("", type, Collections.emptyList());
+    }
 
     public InlineField(String name, Type type, List<FieldFlag> flags) {
         this.name = name;

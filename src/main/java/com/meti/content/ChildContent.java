@@ -108,4 +108,9 @@ public class ChildContent implements Content {
     public String prepare() {
         return value.trim();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return prepare().isBlank();
+    }
 }

@@ -11,11 +11,11 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class IntegerNodeTokenizer extends AbstractNodeTokenizer {
+public class IntTokenizer extends AbstractNodeTokenizer {
     public static final BigInteger START = BigInteger.valueOf(-32767);
     public static final BigInteger END = BigInteger.valueOf(32767);
 
-    public IntegerNodeTokenizer(Content content) {
+    public IntTokenizer(Content content) {
         super(content);
     }
 
@@ -26,7 +26,7 @@ public class IntegerNodeTokenizer extends AbstractNodeTokenizer {
             //checking range per https://en.wikipedia.org/wiki/C_data_types
             if (capsule.compareTo(START) > 0 && capsule.compareTo(END) < 0) {
                 int value = capsule.intValueExact();
-                return Optional.of(new IntNode(value));
+                return Optional.of(new Int(value));
             } else {
                 return Optional.empty();
             }
@@ -35,10 +35,10 @@ public class IntegerNodeTokenizer extends AbstractNodeTokenizer {
         }
     }
 
-    private static class IntNode extends LeafNode {
+    private static class Int extends LeafNode {
         private final int value;
 
-        public IntNode(int value) {
+        public Int(int value) {
             this.value = value;
         }
 
@@ -85,7 +85,7 @@ public class IntegerNodeTokenizer extends AbstractNodeTokenizer {
 
             @Override
             public Node build() {
-                return new IntNode(value);
+                return new Int(value);
             }
         }
     }

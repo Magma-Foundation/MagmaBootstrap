@@ -30,4 +30,6 @@ public interface Content {
     OptionalInt indexFrom(String sequence, int end);
 
     OptionalInt lastIndex(String sequence);
+
+    boolean isEmpty();
 }

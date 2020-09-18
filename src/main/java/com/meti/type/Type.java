@@ -21,6 +21,10 @@ public interface Type {
 
     Stream<Field> streamFields();
 
+    default Optional<String> render() {
+        return render("");
+    }
+
     interface Prototype {
         Prototype withChild(Type child);
 
