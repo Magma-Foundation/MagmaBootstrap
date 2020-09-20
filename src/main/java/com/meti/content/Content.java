@@ -7,6 +7,10 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public interface Content {
+    default String asString(){
+        return value().apply(Function.identity());
+    }
+
     boolean startsWith(String sequence);
 
     boolean endsWith(String sequence);

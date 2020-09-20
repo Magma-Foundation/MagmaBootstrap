@@ -1,5 +1,7 @@
 package com.meti;
 
+import com.meti.util.load.PathClassPath;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +32,7 @@ public class Main {
         }
         try {
             String source = Files.readString(mainScript);
-            Compiler compiler = new Compiler();
+            Compiler compiler = new Compiler(new PathClassPath(Paths.get(".", "test", "source")));
             String target = compiler.compile(source);
             write(target);
         } catch (IOException e) {

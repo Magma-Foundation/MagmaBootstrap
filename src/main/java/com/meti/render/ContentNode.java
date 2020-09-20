@@ -34,7 +34,7 @@ public class ContentNode implements Node {
 
     @Override
     public Prototype createPrototype() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(String.format("Cannot create prototype for value: '%s'", content.asString()));
     }
 
     @Override

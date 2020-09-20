@@ -5,11 +5,13 @@ import com.meti.content.RootContent;
 import com.meti.evaluate.tokenizer.BlockNodeTokenizer;
 import com.meti.evaluate.Evaluator;
 import com.meti.evaluate.tokenizer.MagmaNodeTokenizer;
+import com.meti.util.load.PathClassPath;
 import com.meti.render.BlockNode;
 import com.meti.render.ContentNode;
 import com.meti.render.Node;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,7 +46,7 @@ class BlockNodeTokenizerTest {
     @Test
     void validChild(){
         Content content = new RootContent("{10}");
-        Evaluator<Node> evaluator = new MagmaNodeTokenizer(content);
+        Evaluator<Node> evaluator = new MagmaNodeTokenizer(content, new PathClassPath(Paths.get(".", "test", "source")));
         Optional<Node> optional = evaluator.evaluate();
         Node result = optional.orElseThrow();
         assertEquals(new BlockNode(new ContentNode(new RootContent("10"))), result);

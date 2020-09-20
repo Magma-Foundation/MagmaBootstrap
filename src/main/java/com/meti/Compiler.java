@@ -2,6 +2,7 @@ package com.meti;
 
 import com.meti.content.Content;
 import com.meti.content.RootContent;
+import com.meti.util.load.ClassPath;
 import com.meti.evaluate.tokenizer.MagmaNodeTokenizer;
 import com.meti.process.MagmaProcessor;
 import com.meti.process.Processor;
@@ -12,10 +13,17 @@ import com.meti.resolve.MagmaTypeTokenizer;
 import com.meti.type.Type;
 import com.meti.type.TypeGroup;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Compiler {
+    public final ClassPath classPath;
+
+    public Compiler(ClassPath classPath) {
+        this.classPath = classPath;
+    }
+
     String compile(String content) {
         Node root = new ContentNode(new RootContent("{" + content + "}"));
         Node tree = tokenize(root);
@@ -32,19 +40,24 @@ public class Compiler {
     }
 
     private Node tokenize(Node previous) {
-        Node node = previous.applyToContent(this::parseContent).orElseThrow();
-        Node.Prototype prototype = node.createPrototype();
-        Node.Prototype withFields = node.streamFields()
-                .map(this::resolveField)
-                .reduce(prototype, Node.Prototype::withField, (previous1, next) -> next);
-        Node.Prototype withChildren = node.streamChildren()
-                .map(this::tokenize)
-                .reduce(withFields, Node.Prototype::withChild, (previous1, next) -> next);
-        return withChildren.build();
+        Optional<Node> optional = previous.applyToContent(this::parseContent);
+        if (optional.isPresent()) {
+            Node node = optional.orElseThrow();
+            Node.Prototype prototype = node.createPrototype();
+            Node.Prototype withFields = node.streamFields()
+                    .map(this::resolveField)
+                    .reduce(prototype, Node.Prototype::withField, (previous1, next) -> next);
+            Node.Prototype withChildren = node.streamChildren()
+                    .map(this::tokenize)
+                    .reduce(withFields, Node.Prototype::withChild, (previous1, next) -> next);
+            return withChildren.build();
+        } else {
+            return previous;
+        }
     }
 
     private Node parseContent(Content content) {
-        return new MagmaNodeTokenizer(content)
+        return new MagmaNodeTokenizer(content, classPath)
                 .evaluate()
                 .orElseThrow(supplyInvalidParse(content));
     }
