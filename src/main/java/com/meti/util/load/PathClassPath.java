@@ -1,11 +1,11 @@
 package com.meti.util.load;
 
-import com.meti.CompileException;
+import com.meti.feature.CompileException;
 import com.meti.content.Content;
-import com.meti.content.RootContent;
-import com.meti.render.ContentNode;
-import com.meti.render.EmptyNode;
-import com.meti.render.Node;
+import com.meti.content.StringContent;
+import com.meti.feature.render.ContentNode;
+import com.meti.feature.render.Empty;
+import com.meti.feature.render.Node;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -41,13 +41,13 @@ public class PathClassPath extends AbstractClassPath {
     Optional<Node> read(Path result) throws IOException {
         Node res = !loaded.contains(result) ?
                 readPathToNode(result) :
-                new EmptyNode();
+                new Empty();
         return Optional.of(res);
     }
 
     private Node readPathToNode(Path result) throws IOException {
         String importValue = Files.readString(result);
-        RootContent content = new RootContent(importValue);
+        StringContent content = new StringContent(importValue);
         loaded.add(result);
         return new ContentNode(content);
     }

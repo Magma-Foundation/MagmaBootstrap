@@ -1,9 +1,9 @@
 package com.meti.process;
 
-import com.meti.evaluate.processable.MagmaLeafProcessable;
-import com.meti.evaluate.processable.MagmaPostProcessable;
-import com.meti.evaluate.processable.MagmaPreProcessable;
-import com.meti.evaluate.processable.Processable;
+import com.meti.feature.evaluate.process.MagmaLeafProcessable;
+import com.meti.feature.evaluate.process.MagmaPostProcessable;
+import com.meti.feature.evaluate.process.MagmaPreProcessable;
+import com.meti.feature.evaluate.process.Processable;
 
 public class MagmaProcessor extends RecursiveProcessor {
     @Override

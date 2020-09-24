@@ -1,13 +1,12 @@
 package com.meti.stack;
 
-import com.meti.render.Field;
-import com.meti.type.Type;
+import com.meti.UndefinedException;
+import com.meti.feature.render.Field;
+import com.meti.feature.render.Type;
 import com.meti.util.Monad;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public class ImmutableCallStack implements CallStack {
@@ -28,12 +27,19 @@ public class ImmutableCallStack implements CallStack {
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
-    private Frame popLast(){
-        if(!frames.isEmpty()) {
-           return frames.pop();
+    private Frame popLast() {
+        if (!frames.isEmpty()) {
+            return frames.pop();
         } else {
             return new ImmutableFrame();
         }
+    }
+
+    @Override
+    public CallStack define(String name, Set<Field> fields) {
+        Frame frame = popLast().define(name, fields);
+        frames.push(frame);
+        return new ImmutableCallStack(frames);
     }
 
     @Override
@@ -60,11 +66,34 @@ public class ImmutableCallStack implements CallStack {
 
     @Override
     public CallStack defineAll(List<Field> fields) {
-        return fields.stream().reduce(this, CallStack::define, (oldStack, newStack) -> newStack);
+        return fields.stream().reduce(this, (BiFunction<CallStack, Field, CallStack>) CallStack::define, (oldStack, newStack) -> newStack);
     }
 
     @Override
-    public boolean isDefined(String name){
+    public boolean isDefined(String name) {
         return frames.stream().anyMatch(frame -> frame.isDefined(name));
+    }
+
+    @Override
+    public boolean doesReturn(String name, Type type) {
+        return frames.stream()
+                .map(frame -> frame.doesReturn(name, type))
+                .flatMap(Optional::stream)
+                .findFirst()
+                .orElseThrow(() -> createUndefined(name));
+    }
+
+    @Override
+    public boolean matches(String name, Type type) {
+        return frames.stream()
+                .map(frame -> frame.match(name, type))
+                .flatMap(Optional::stream)
+                .findFirst()
+                .orElseThrow(() -> createUndefined(name));
+    }
+
+    private UndefinedException createUndefined(String name) {
+        String message = String.format("%s is not defined in %s", name, ImmutableCallStack.this);
+        return new UndefinedException(message);
     }
 }

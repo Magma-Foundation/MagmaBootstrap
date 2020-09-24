@@ -1,8 +1,5 @@
 package com.meti.util;
 
-import com.meti.render.FieldFlag;
-
-import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 

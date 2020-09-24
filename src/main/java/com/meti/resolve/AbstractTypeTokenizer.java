@@ -1,6 +1,6 @@
 package com.meti.resolve;
 
-import com.meti.type.Type;
+import com.meti.feature.render.Type;
 
 public abstract class AbstractTypeTokenizer implements TypeTokenizer {
     protected final Type previous;
